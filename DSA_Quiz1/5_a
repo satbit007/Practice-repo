@@ -1,0 +1,53 @@
+#include <stdio.h>
+#include <math.h>
+
+int * sortEveryThirdElement(int *a, int n)
+{
+    int size_a = floor(n/3);
+    int i_val=0;
+    int temp=0;
+    
+    int sort[size_a];
+    
+    for(int i=2;i<n;i=i+3)
+    {
+        sort[i_val] = a[i];
+        i_val++;
+    }
+    
+    for(int j=0;j<size_a;j++)//Loop to swap and sort every third element in ascending order
+    {
+        for(int l=0;l<size_a;l++)
+        {
+            if(sort[j]<sort[l])
+            {
+                temp = sort[j];
+                sort[j] = sort[l];
+                sort[l] = temp;
+            }
+        }
+    }
+    
+    
+    i_val = 0;
+    for(int i=2;i<n;i=i+3)
+    {
+        a[i] = sort[i_val];
+        i_val++;
+    }
+    return a;
+}
+
+void main() {
+    
+    int a[] = {134,421,603,222,743,243,119,324,249,51,50,231};
+    int n = sizeof(a)/sizeof(a[0]);
+    
+    sortEveryThirdElement(a, n);
+    
+    for(int i=0;i<n;i++)
+    {
+        printf("%d ", a[i]);
+    }
+    return 0;
+}

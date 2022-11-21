@@ -1,0 +1,25 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+void basicFizzBuzz(int x)
+{   
+if  ((x%33) == 0 || (x%39) == 0 || (x%55) == 0 || (x%65) == 0){
+            printf("fizzbuzz\t");
+}       
+    else if ((x%11) == 0 || (x%13) == 0){
+            printf("buzz\t");
+    }
+        else if ((x%3) == 0 || (x%5) == 0){
+                printf("fizz\t");
+        }
+            else{ // print the number
+            printf("%d\t", x);
+            }           
+}
+
+int main (int argc, char** argv){
+    int x;
+    printf("Enter the number :");
+    scanf("%d", &x);
+    basicFizzBuzz(x);
+}

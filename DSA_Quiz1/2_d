@@ -1,0 +1,115 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<time.h>
+
+typedef struct NodeAddress {
+    int data;
+    struct NodeAddress* next;
+    int k;
+    struct NodeAddress* nextK;
+} NodeAddress;
+
+//creating a linkedlist with nextK pointers
+NodeAddress* arrayToLLWithNextK(int* a, int n) {
+    NodeAddress* head = NULL;
+    NodeAddress* temp = NULL;
+
+    //creating the linkedlist first
+    for(int i=0; i<n; i++) {
+        NodeAddress* newNode = (NodeAddress*)malloc(sizeof(NodeAddress));
+        newNode->data = a[i];
+        newNode->next = NULL;
+        newNode->k = (rand() % 4) + 2;
+        newNode->nextK = NULL;
+
+        if (head == NULL) {
+            head = newNode;
+            temp = newNode;
+        } else {
+            temp->next = newNode;
+            temp = newNode;
+        }
+    }
+
+    //setting the nextK pointers
+    temp = head;
+    while(temp != NULL) {
+        int count = temp->k;
+        NodeAddress* temp2 = temp;
+        for(NodeAddress* temp2 = head; count>0&&temp2!=NULL; temp2=temp2->next ){
+            count--;
+        }
+        temp->nextK = temp2;
+        temp = temp->next;
+    }
+    //returning the head of the linkedlist
+    return head;
+}
+
+void printLLNextK(NodeAddress* head) {
+    NodeAddress* temp = head;
+    while(temp != NULL) {
+        if (temp->nextK != NULL) {
+            printf("Data: %d -> K: %d -> NextK: %d\n", temp->data, temp->k, temp->nextK->data);
+        } else {
+            printf("Data: %d -> K: %d -> NextK: NULL\n", temp->data, temp->k);
+        }
+        temp = temp->next;
+    }
+}
+
+NodeAddress* reverseLLWithNext2(NodeAddress* head) {
+    NodeAddress* curr = head;
+    NodeAddress* prev = NULL;
+    NodeAddress* next = NULL;
+    NodeAddress* f_n = curr->nextK;
+
+    int count = 0;
+
+    while(curr!= NULL) {
+        next = curr->next;
+        curr->next = prev;
+
+        if(count < curr->k) curr->nextK= NULL;
+        if (f_n) {
+            f_n->nextK= curr;
+            f_n = f_n->next;
+        }
+        prev = curr;
+        curr = next;
+        count++;
+    }
+    return prev;
+}
+
+
+void deleteLL(NodeAddress* head) {
+    NodeAddress* temp = head;
+    while(temp != NULL) {
+        NodeAddress* next = temp->next;
+        free(temp);
+        temp = next;
+    }
+}
+
+int main(void) {
+    //change a[] to test different cases
+    int a[] = { 510, 13, 7, 26, 4, 678, 81, 11, 123, 3, 12 };
+    int n = sizeof(a)/sizeof(a[0]);
+
+    srand(time(0));
+    
+    //original linkedlist
+    printf("\nLinkedlist Structure:\n");
+    NodeAddress* head = arrayToLLWithNextK(a, n);
+    printLLNextK(head);
+    printf("\nReversed: \n");
+    NodeAddress* head2= reverseLLWithNext2(head);
+    printLLNextK(head2);
+    
+    
+    //deleting the linkedlist
+    deleteLL(head);
+
+    return 0;
+}

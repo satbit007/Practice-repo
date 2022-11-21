@@ -1,0 +1,34 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+void advancedFizzBuzz ( int *a, int m, int *b, int nb, int * f, int nf) {
+    for (int k = 0; k < m; k++) {
+        for (int j = 0; j < nf; j++) {
+            if(a[k] % f[j] == 0) {
+                printf("fizz");
+                break;
+            }
+        }
+
+        for (int j = 0; j < nb; j++) {
+            if(a[k] % b[j] == 0) {
+                printf("buzz");
+                break;
+            }
+        }
+
+        printf("\n");
+    }
+
+}
+int main(){
+    int a[] = {15, 20, 25, 45};
+    int l = 4;
+    int f[] = {2, 5};
+    int b[] = {7, 10, 15};
+    int nf = 2;
+    int nb = 3;
+    advancedFizzBuzz(a, l, b, nb, f, nf);
+    
+    return 0;
+}

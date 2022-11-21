@@ -1,0 +1,78 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<stdbool.h>
+
+typedef struct TreeNode {
+    int data;
+    struct TreeNode* left;
+    struct TreeNode* right;
+} TreeNode;
+
+void successorReverseBST(TreeNode* root, int k, TreeNode** prev, bool* found) {
+    if (root == NULL) return;
+
+    successorReverseBST(root->left, k, prev, found);
+    if (root->data == k || *found) {
+        *found = true;
+        return;
+    }
+    *prev = root;
+    successorReverseBST(root->right, k, prev, found);
+}
+
+TreeNode* createBSTUtil(TreeNode* root, int* a, int n, int counter) {
+    if (counter >= n) return NULL;
+    if (!root) {
+        root = (TreeNode*) malloc(sizeof(TreeNode));
+        root->data = a[counter];
+        root->left = NULL;
+        root->right = NULL;
+    }
+    else {
+        if (a[counter] > root->data) {
+            root->left = createBSTUtil(root->left, a, n, counter);
+        }
+        else {
+            root->right = createBSTUtil(root->right, a, n, counter);
+        }
+    }
+    return root;
+}
+
+TreeNode* arrayToReverseBST(int *a, int n) {
+    TreeNode* root = NULL;
+    for(int i = 0; i < n; i++) {
+        root = createBSTUtil(root, a, n, i);
+    }
+    return root;
+}
+
+int main(void) {
+    //change a to test different cases
+    int a[] = {9, 5, 4, 6, 10, 8, 7, 11};
+    int n = sizeof(a)/sizeof(a[0]);
+    TreeNode* root = arrayToReverseBST(a, n);
+
+    //taking user input to continue the search for the successor
+    int key = -1;
+    printf("Enter key to find successor for: ");
+    scanf("%d", &key);
+
+    //defining two variables for the successorReverseBST function
+    TreeNode* prev = NULL;
+    bool found = false;
+
+    //calling the function
+    successorReverseBST(root, key, &prev, &found);
+
+    //checking if successor is found or not and also finding if the key is not present in the tree. Then printing the result accordingly
+    if(prev && found)
+        printf("Successor: %d\n", prev->data);
+
+    else if (!found && prev) 
+        printf("Pudding\n");
+
+    else printf("Hamburger\n");
+
+    return 0;
+}
